@@ -2,7 +2,7 @@ drop database if exists dashusers;
 create database dashusers;
 
 drop user if exists botuser;
-create user smuser with password 'test';
+create user botuser with password 'test';
 
 grant all privileges on database dashusers to botuser;
 
@@ -12,7 +12,7 @@ set role botuser;
 
 /* Tiendas */
 drop table if exists organizaciones cascade;
-create table tiendas (
+create table organizaciones (
     id serial primary key,
     nombre text,
     RFC text,
@@ -55,7 +55,7 @@ create table usuarios(
     direccion_pais text,
     permiso_tablero boolean,
     permiso_administrador boolean,
-    permiso_reportes boolean,
+    permiso_reportes boolean
 );
 
 insert into usuarios ("id_organizacion","usuario","contrasena","nombres","apellido_paterno","apellido_materno","permiso_tablero","permiso_administrador","permiso_reportes") values

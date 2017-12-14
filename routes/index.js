@@ -19,27 +19,30 @@ router.use(passport.initialize());
 router.use(passport.session());
 var LocalStrategy = require('passport-local').Strategy;
 
+
+/*
+ * Login
+ */
 passport.use('login', new LocalStrategy({
         passReqToCallback : true
     },
     function(req, username, password, done) {
         // check in postgres if a user with username exists or not
         db_conf.db.oneOrNone('select * from usuarios where usuario = $1', [ username ]).then(function (user) {
-            // session
-            if (!user){
-                console.log('User Not Found with username '+ username);
-                return done(null, false, req.flash('message', 'Usuario no registrado'));
-            }
-
-            if (!isValidPassword(user ,password)){
-                console.log('Contraseña no válida');
-                return done(null, false, req.flash('message', 'Contraseña no válida'));
-            }
-
-            return done(null,user);
+          // Verify user
+          if (!user){
+            console.log('User Not Found with username ' + username);
+            return done(null, false, req.flash('message', 'Usuario no registrado'));
+          }
+          // Verify password
+          if (!isValidPassword(user ,password)){
+            console.log('Contraseña no válida');
+            return done(null, false, req.flash('message', 'Contraseña no válida'));
+          }
+          return done(null,user);
         }).catch(function (error) {
-            console.log(error);
-            return done(error);
+          console.log(error);
+          return done(error);
         });
     }
 ));
@@ -57,35 +60,30 @@ passport.serializeUser(function(user, done) {
 
 passport.deserializeUser(function(id, done) {
     db_conf.db.one(' select * from usuarios where id = $1',[ id ]).then(function (user) {
-        //console.log('deserializing user:',user);
         done (null, user);
     }).catch(function (error) {
-        done(error);
-        console.log(error);
+      done(error);
+      console.log(error);
     });
 });
 
 var isAuthenticated = function (req, res, next) {
-    // if user is authenticated in the session, call the next() to call the next request handler
-    // Passport adds this method to request object. A middleware is allowed to add properties to
-    // request and response objects
-    if (req.isAuthenticated())
-        return next();
-    // if the user is not authenticated then redirect him to the login page
-    res.redirect('/');
+  if (req.isAuthenticated())
+    return next();
+  // if the user is not authenticated then redirect him to the login page
+  res.redirect('/');
 };
 
 var isNotAuthenticated = function (req, res, next) {
-    if (req.isUnauthenticated())
-        return next();
-    // if the user is authenticated then redirect him to the main page
-    res.redirect('/principal');
+  if (req.isUnauthenticated())
+    return next();
+  // if the user is authenticated then redirect him to the main page
+  res.redirect('/principal');
 };
-
 
 // Generates hash using bCrypt
 var createHash = function(password){
-    return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
+  return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
 };
 
 /*
@@ -94,11 +92,12 @@ var createHash = function(password){
  * ############################################
  */
 
+
 /* Handle Login POST */
 router.post('/login', passport.authenticate('login', {
-    successRedirect: '/principal',
-    failureRedirect: '/',
-    failureFlash : true
+  successRedirect: '/principal',
+  failureRedirect: '/',
+  failureFlash : true
 }));
 
 /* Handle Logout */
@@ -114,5 +113,5 @@ router.get('/', isNotAuthenticated, function(req, res, next) {
 });
 
 router.get('/principal', isAuthenticated, function (req, res) {
-    res.render('principal', { title: 'Tienda', user: req.user, section: 'principal'});
+  res.render('principal', { title: 'Landing', user: req.user, section: 'principal'});
 });

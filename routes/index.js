@@ -115,3 +115,5 @@ router.get('/', isNotAuthenticated, function(req, res, next) {
 router.get('/principal', isAuthenticated, function (req, res) {
   res.render('principal', { title: 'Landing', user: req.user, section: 'principal'});
 });
+
+module.exports = router;

@@ -37,7 +37,7 @@ var get_runs = function(){
     $.ajax({
         url:       "https://atenciontodo.com/api/v2/runs.json/?flow=9a28ef69-9b20-4b7e-b9a0-b0ebe12ceaf0",
         type:      'GET',
-        headers:   { "Authorization": "Token " + "db99ba913d7362212710ee82c9503f589884ce44"}, 
+        headers:   { "Authorization": "Token " + "db99ba913d7362212710ee82c9503f589884ce44"},
         dateType: 'json',
         async:    false,
         success: function(data){

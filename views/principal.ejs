@@ -10,12 +10,19 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <!-- font awesome -->
         <script src="https://use.fontawesome.com/120795d581.js"></script>
+        <!-- JQUERY -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <!-- Queries -->
+        <script src="/javascripts/api_rapidpro.js"></script>
 
         <meta charset="utf-8" />
     </head>
     <body>
         <h1>Bienvenido a: <span style="color:#3F51B5"><%=title%></span></h1>
         <h3>Ojalá y te peles!</h3>
+        <button onclick="get_users()">Users</button>
+        <button onclick="get_messages()">Messages</button>
+        <button onclick="get_runs()">Runs</button>
         <button><a href="/signout"><i class="fa fa-sign-out"></i> Salir</button>
     </body>
 </html>

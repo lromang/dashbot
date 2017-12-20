@@ -28,6 +28,9 @@ passport.use('login', new LocalStrategy({
     },
     function(req, username, password, done) {
         // check in postgres if a user with username exists or not
+        console.log(req.body)
+        // username=req.body.username
+        // password=req.body.password
         db_conf.db.oneOrNone('select * from usuarios where usuario = $1', [ username ]).then(function (user) {
           // Verify user
           if (!user){
@@ -39,7 +42,7 @@ passport.use('login', new LocalStrategy({
             console.log('Contraseña no válida');
             return done(null, false, req.flash('message', 'Contraseña no válida'));
           }
-          return done(null,user);
+          return done(null, user);
         }).catch(function (error) {
           console.log(error);
           return done(error);
@@ -113,7 +116,7 @@ router.get('/', isNotAuthenticated, function(req, res, next) {
 });
 
 router.get('/principal', isAuthenticated, function (req, res) {
-  res.render('principal', { title: 'Landing', user: req.user, section: 'principal'});
+    res.render('principal', { title: 'Landing', user: req.user, section: 'principal'});
 });
 
 module.exports = router;

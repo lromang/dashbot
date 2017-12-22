@@ -119,4 +119,8 @@ router.get('/principal', isAuthenticated, function (req, res) {
     res.render('principal', { title: 'Landing', user: req.user, section: 'principal'});
 });
 
+router.get('/tablero', isAuthenticated, function(req, res){
+  res.render('tablero', {title: 'tablero', user: req.user, section: 'tablero'});
+});
+
 module.exports = router;

@@ -7,6 +7,7 @@ var get_users = function(){
         async:false,
         success: function(data){
             console.log('Obtuvimos ' + data.results.length + ' usuarios' );
+            $('#n_users').html('<h4>Usuarios activos: <strong style="color:#3498DB">' + data.results.length + '</strong></h4>')
         },
         error: function(xhr, errmsg, err){
             console.log(xhr.status + ': ' + xhr.responseText);
@@ -24,6 +25,7 @@ var get_messages = function(){
         async:false,
         success: function(data){
             console.log('Obtuvimos ' + data.results.length + ' mensajes');
+            $('#n_messages').html('<h4>Mensajes intercambiados: <strong style="color:#3498DB">' + data.results.length + '</strong></h4>')
         },
         error: function(xhr, errmsg, err) {
             console.log(xhr.status + ': ' + xhr.responseText);
@@ -59,6 +61,7 @@ var get_runs = function(){
             // Type of Mantenimiento
             // Type of Seguridad
             // Type of Quejas
+            $('#n_flows').html('<h4>Flujos recorridos: <strong style="color:#3498DB">' + data.results.length + '</strong></h4>')
         },
         error: function(xhr, errmsg, err){
             console.log('no')

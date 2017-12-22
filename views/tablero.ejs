@@ -20,13 +20,109 @@
         <% include navbar.ejs%>
         <div class="container" style="position:relative;padding-top:100px">
             <div class="row">
-        <h1>Bienvenido a: <span style="color:#3F51B5"><%=title%></span></h1>
-        <button onclick="get_users()">Users</button>
-        <button onclick="get_messages()">Messages</button>
-        <button onclick="get_runs()">Runs</button>
-        </div>
+                <div class="col-md-4">
+                    <div class="col-md-12">
+                        <h2><strong style="color:#3498DB">Analytics</strong></h2>
+                    </div>
+                    <div class="col-md-12">
+                        <div id="n_users"></div>
+                    </div>
+                    <div class="col-md-12">
+                        <div id="n_messages"></div>
+                    </div>
+                    <div class="col-md-12">
+                        <div id="n_flows"></div>
+                    </div>
+                </div>
+                <div class="col-md-8" id="graph" style="width:500px;height:500px"></div>
+            </div>
         </div>
     </body>
     <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+     $( document ).ready(function() {
+         get_users()
+         get_messages()
+         get_runs()
+     });
+    </script>
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script>
+     var data = [{"name": "servicios","value": 100},
+                 {"name": "quejas", "value": 312},
+                 {"name": "seguridad", "value": 222},
+                 {"name": "pagos", "value": 254}]
+
+     var width, height
+     var chartWidth, chartHeight
+     var margin
+     var svg        = d3.select("#graph").append("svg")
+     var chartLayer = svg.append("g").classed("chartLayer", true)
+
+
+     var colorScale = d3.scaleOrdinal()
+                        .domain(['pri', 'prd', 'pan', 'morena'])
+                        .range(['#0D47A1', '#3498DB', '#2962FF', '#BBDEFB'])
+
+     width = document.querySelector("#graph").clientWidth
+     height = document.querySelector("#graph").clientHeight
+
+     margin = {top:40, left:0, bottom:40, right:0 }
+
+
+     chartWidth = width - (margin.left+margin.right)
+     chartHeight = height - (margin.top+margin.bottom)
+
+     svg.attr("width", width).attr("height", height)
+
+
+     chartLayer
+        .attr("width", chartWidth)
+        .attr("height", chartHeight)
+        .attr("transform", "translate("+[margin.left, margin.top]+")")
+
+
+     var arcs = d3.pie()
+                  .sort(null)
+                  .value(function(d) { return d.value; })
+     (data)
+
+     var arc = d3.arc()
+                 .outerRadius(chartHeight/2)
+                 .innerRadius(chartHeight/4)
+                 .padAngle(0.03)
+                 .cornerRadius(8)
+
+     var pieG = chartLayer.selectAll("g")
+                          .data([data])
+                          .enter()
+                          .append("g")
+                          .attr("transform", "translate("+[chartWidth/2, chartHeight/2]+")")
+
+     var block = pieG.selectAll(".arc")
+                     .data(arcs)
+
+     var newBlock = block.enter().append("g").classed("arc", true)
+
+     newBlock.append("path")
+                         .attr("d", arc)
+                         .attr("id", function(d, i) { return "arc-" + i })
+                         .attr("stroke", "gray")
+                         .attr("fill", function(d,i){ return colorScale(d.data.name) })
+
+
+     newBlock.append("text")
+                         .attr("dx", 55)
+                         .attr("dy", -5)
+                         .append("textPath")
+                         .attr("xlink:href", function(d, i) { return "#arc-" + i; })
+                         .text(function(d) { console.log(d);return d.data.name })
+                         .attr("font-size", "20px")
+                         .style("font-weight", "bold")
+                         .attr("fill", "#424242");
+
+    </script>
+
 </html>

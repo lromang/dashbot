@@ -47,5 +47,12 @@
          get_messages()
          get_runs()
      });
+
+     window.setInterval(function(){
+         $('#graph').html('')
+         get_users()
+         get_messages()
+         get_runs()
+     }, 5000);
     </script>
 </html>
